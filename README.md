@@ -1,5 +1,8 @@
 # The AI DJ: Context-Aware Music Recommendation and Playlist Optimization
 
+## Team Members: 
+- Zak Gouiss
+  
 ## Overview
 
 AI DJ is a music recommendation system that predicts what song should play next based on a listener's recent listening history.
