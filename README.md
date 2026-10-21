@@ -44,7 +44,7 @@ Preprocessing and feature scaling will be performed before recommendation.
 
 **Output:** The recommended next song, with an optional extended mode that generates an optimized playlist.
 
-## Technologies
+## Technologies (make sure that these are installed to execute the program!)
 
 * Python
 * Jupyter Notebook
