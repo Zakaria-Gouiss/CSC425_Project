@@ -7,6 +7,7 @@ from sklearn.model_selection import GridSearchCV
 from data_loader import load_dataset
 from preprocessing import clean_data, select_features, scale_features
 import pandas as pd
+import joblib # we will use this to export our model
 
 tracks = load_dataset()
 cleaned_tracks = clean_data(tracks)
@@ -55,6 +56,7 @@ print("Baseline KNN parameters:", baseline_knn.get_params())
 print("Best KNN parameters:", grid_search.best_params_)
 print("Best grid-search score:", grid_search.best_score_)
 
+joblib.dump(optimized_knn, "models/optimized_knn.pk1")  # Save the optimized KNN model to a file
 
 def find_similar_songs(
     model,
