@@ -1,4 +1,4 @@
-
+#basic data loading 
 from pathlib import Path
 
 import pandas as pd
@@ -18,7 +18,7 @@ def load_dataset() -> pd.DataFrame: #arrow function that loads our dataset from 
     return pd.read_csv(DATASET_PATH)
 
 
-if __name__ == "__main__": #if we are in the main.py file, we execute basic data loading pandas functions
+if __name__ == "__main__": #if this file is set to be called, we execute basic data loading pandas functions
     tracks = load_dataset()
 
     print("Dataset shape:", tracks.shape)
