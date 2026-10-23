@@ -1,17 +1,10 @@
 import numpy as np
-
 import pandas as pd
-
 from scipy.optimize import linear_sum_assignment
-
 from trajectories import (
-
     FEATURES,
-
     FEATURE_RANGES,
-
     get_trajectory,
-
 )
 
 GENRE_FAMILIES = { #useful for genre_compatibility scoring, each genre family is a set of related genres that are considered compatible with each other
@@ -139,29 +132,19 @@ GENRE_FAMILIES = { #useful for genre_compatibility scoring, each genre family is
 }
 
 # Playlist configuration
-
 PLAYLIST_LENGTH = 20
-
 N_STARTING_SONGS = 3
-
 N_ADDITIONAL_SONGS = PLAYLIST_LENGTH - N_STARTING_SONGS
-
 N_PLAYLISTS = 5
-
 # Number of randomized candidate pools to evaluate per trajectory.
-
 VARIANTS_PER_TRAJECTORY = 100
-
 # Weighted playlist scoring algorithm
-
 WEIGHTS = {
     "trajectory": 0.4705882353,
     "genre": 0.2352941176,
     "transition": 0.2941176471,
 }
-
 # Audio features used to measure transition smoothness.
-
 TRANSITION_FEATURES = [
 
     "tempo",
@@ -189,19 +172,12 @@ DEFAULT_RANGES = {
 }
 
 def _find_column(df: pd.DataFrame, names: list[str]) -> str:
-
     """Find a column using possible column names."""
-
     for name in names:
-
         if name in df.columns:
-
             return name
-
     raise ValueError(
-
         f"Could not find any of these columns: {names}"
-
     )
 
 def _track_identity(df: pd.DataFrame) -> pd.Series:
@@ -237,9 +213,7 @@ def _trajectory_targets(
     n_positions: int = PLAYLIST_LENGTH,
 
 ) -> np.ndarray:
-
     """
-
     Interpolate the existing trajectory targets to 20 positions.
 
     Returns:
@@ -247,63 +221,39 @@ def _trajectory_targets(
         Array of shape (20, number of audio features).
 
     """
-
     targets = np.column_stack([
-
         np.asarray(trajectory[f], dtype=float)
-
         for f in FEATURES
-
     ])
 
     old_positions = np.linspace(
-
         0, 1, len(targets)
-
     )
 
     new_positions = np.linspace(
-
         0, 1, n_positions
-
     )
 
     return np.column_stack([
-
         np.interp(
-
             new_positions,
-
             old_positions,
-
             targets[:, i],
-
         )
-
         for i in range(len(FEATURES))
-
     ])
 
 def _normalize_features(values: np.ndarray) -> np.ndarray:
 
-    """Normalize audio features using the project's feature ranges."""
-
     lows = np.array([
-
         FEATURE_RANGES[f][0] for f in FEATURES
-
     ])
-
     spans = np.array([
-
         FEATURE_RANGES[f][1] - FEATURE_RANGES[f][0]
-
         for f in FEATURES
-
     ])
 
     spans = np.where(spans == 0, 1, spans)
-
     return np.clip(
 
         (values - lows) / spans,
@@ -319,11 +269,8 @@ def _genre_tokens(value) -> set[str]:
     """Convert a genre value into a set of genre labels."""
 
     if pd.isna(value):
-
         return set()
-
     if isinstance(value, (list, tuple, set)):
-
         values = value
 
     else:

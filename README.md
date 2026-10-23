@@ -42,11 +42,11 @@ Preprocessing and feature scaling will be performed before recommendation.
 
 **AI Task:** Context-aware music recommendation.
 
-**Output:** The recommended next song, with an optional extended mode that generates an optimized playlist.
+**Output:** A music playlist (starting with first 3 songs) that generate great recommended next songs to listen, with transitions.
 
 ## Technologies (make sure that these are installed to execute the program!)
 
-* Python
+* Python 3.10 + (Having a version 3.10 or higher is a MUST!)
 * Jupyter Notebook
 * pandas
 * NumPy
