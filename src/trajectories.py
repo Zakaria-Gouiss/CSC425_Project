@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 
 
-# Ten target points, one for each position in the playlist.
-N_SONGS = 10
+# Seventeen target points, one for each position in the playlist (total output is a 20 song playlist, with the first 3 songs being the starting songs, and the last 17 songs being the generated candidates)
+N_SONGS = 17
 
-FEATURES = [
+FEATURES = [ 
     "danceability",
     "energy",
     "loudness",
@@ -17,35 +17,26 @@ FEATURES = [
     "tempo",
 ]
 
-
 def line(start, end):
-    """Linear progression from a starting value to an ending value."""
-    return np.linspace(start, end, N_SONGS)
+    return np.linspace(start, end, N_SONGS, dtype=float)
 
 
 def steady(value):
     return np.full(N_SONGS, value, dtype=float)
 
 
-def wave(low, high): #helps alternate between low and high values for a feature, creating a wave-like pattern
-    return np.array([
-        low, high, low + (high - low) * 0.25,
-        high, low, high, low + (high - low) * 0.40,
-        high, low, (low + high) / 2
-    ], dtype=float)
+def wave(low, high):
+    t = np.linspace(0, 1, N_SONGS)
+    return low + (high - low) * (0.5 + 0.5 * np.sin(2 * np.pi * 2 * t)) #ai assisted wave function to create a sinusoidal pattern for the trajectory
 
 
 def exploration(low, high): #ai assisted exploration of the feature space, with a focus on diversity and variation
-    return np.array([
-        low, low + 0.15 * (high - low),
-        low + 0.40 * (high - low),
-        low + 0.25 * (high - low),
-        low + 0.60 * (high - low),
-        low + 0.45 * (high - low),
-        low + 0.80 * (high - low),
-        low + 0.65 * (high - low),
-        high, low + 0.75 * (high - low)
-    ], dtype=float)
+    t = np.linspace(0, 1, N_SONGS)
+    # Zigzag: climbs with a dip every few songs, so no two neighbors are alike
+    zigzag = 0.5 + 0.5 * np.sin(2 * np.pi * 3 * t) * t + 0.5 * t * 0.6
+    zigzag = np.clip(zigzag, 0, 1)
+    return low + (high - low) * zigzag
+
 
 TRAJECTORIES = { #ai assisted possible trajectories for the playlist, each trajectory is a dictionary of features and their target values
     "steady": {
@@ -110,19 +101,13 @@ TRAJECTORIES = { #ai assisted possible trajectories for the playlist, each traje
 
     "emotional_arc": {
         "danceability": line(0.35, 0.65),
-        "energy": np.array([
-            0.35, 0.30, 0.40, 0.50, 0.60,
-            0.70, 0.80, 0.75, 0.60, 0.45
-        ]),
+        "energy": 0.3 + 0.5 * np.sin(np.pi * np.linspace(0, 1, N_SONGS)),  # rises to a peak, then falls
         "loudness": line(-16, -8),
         "speechiness": line(0.04, 0.08),
         "acousticness": line(0.65, 0.25),
         "instrumentalness": line(0.35, 0.10),
         "liveness": steady(0.15),
-        "valence": np.array([
-            0.20, 0.15, 0.25, 0.35, 0.50,
-            0.65, 0.80, 0.85, 0.75, 0.90
-        ]),
+        "valence": 0.2 + 0.7 * np.linspace(0, 1, N_SONGS),
         "tempo": line(75, 115),
     },
 

@@ -16,7 +16,7 @@ audio_features = [ #the features we want to keep, so I will drop any other featu
 ]
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df.dropna(subset=audio_features) #dropping rows with missing values in the audio features columns
-    df = df.drop_duplicates(subset=["track_id,", "track_name", "artists"]) #dropping duplicates based on track_id, track_name, and artists
+    df = df.drop_duplicates(subset=["track_id", "track_name", "artists"]) #dropping duplicates based on track_id, track_name, and artists
     df = df.reset_index(drop=True)
     return df
 
